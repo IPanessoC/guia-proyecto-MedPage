@@ -47,3 +47,6 @@ Para añadir un estilo de diseño: agrega una fila a `STYLES` (`[nombre, fuente,
 
 ## Datos guardados en el navegador
 El borrador del formulario (`guia-borrador`) y el estilo visual (`guia-estilo3`) se guardan en `localStorage`. Tras un envío exitoso a Formspree, `clearSaved()` borra ambos, vacía el formulario y deja el sitio con el estilo que se estaba viendo (solo en esa sesión). Si el envío falla o se usa “Copiar resumen”, no se borra nada.
+
+## Visor ampliado con zoom
+Al hacer clic (o Enter) en cualquier imagen de un carrusel se abre una ventana modal (`#lb`) con la imagen grande. Zoom de 100 % a 800 %: botones − / +, rueda del ratón, pellizco en pantallas táctiles, doble clic o doble toque (100 % ↔ 250 %) y teclas `+`, `-`, `0`. Con zoom, se mueve arrastrando. Si el carrusel tiene varias imágenes, se navega con ‹ › o las flechas del teclado; Esc o ✕ cierran. Lógica en `js/app.js` (`openLightbox`, `lbZoom`).

@@ -2,8 +2,8 @@
    Cambia estos datos, activa/oculta páginas con on:true/false
    y activa/oculta zonas de la anatomía con on:true/false. */
 const CONFIG={
-  project:"Med-Page", client:"Maria Camila P.", analyst:"Inti Panesso C. / Analista Funcional",
-  contact:"intipanessochavez@gmail.com · +57 333 2356966",
+  project:"[Nombre del proyecto]", client:"[Nombre del cliente]", analyst:"[Analista Funcional]",
+  contact:"[correo@empresa.com] · [Teléfono]",
   goal:"[Ej.: Presentar los servicios y facilitar que los clientes nos contacten.]",
   audience:"[Ej.: Familias de la ciudad que buscan servicios de ___.]",
   formspree:"https://formspree.io/f/TU_ID",
@@ -66,14 +66,44 @@ function initCarousels(root){root.querySelectorAll(".car").forEach(c=>{
  t.addEventListener("scroll",mark,{passive:true});mark();
  const pv=c.querySelector(".pv"),nx=c.querySelector(".nx");if(pv){pv.onclick=()=>go(idx()-1);nx.onclick=()=>go(idx()+1)}
  dots.forEach(d=>d.onclick=()=>go(+d.dataset.i));
+ const imgs=[...c.querySelectorAll(".sl img")],items=imgs.map(im=>({src:im.getAttribute("src"),alt:im.alt,cap:(im.nextElementSibling||{}).textContent||""}));
+ imgs.forEach((im,k)=>{im.tabIndex=0;im.setAttribute("role","button");im.title="Clic para ampliar";const open=()=>openLightbox(items,k);im.onclick=open;im.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}}});
 })}
 function openForm(){$("#fp").classList.remove("min");$("#tg").setAttribute("aria-expanded","true");const sp=$("#sp");if(sp){sp.classList.add("min");$("#stg").setAttribute("aria-expanded","false")}}
 
+/* ============ VISOR AMPLIADO CON ZOOM (clic en una imagen de assets) ============ */
+const LB={list:[],i:0,z:1,x:0,y:0};
+function lbApply(){$("#lbi").style.transform=`translate(${LB.x}px,${LB.y}px) scale(${LB.z})`;$("#lbz").textContent=Math.round(LB.z*100)+"%";$("#lbv").classList.toggle("zm",LB.z>1)}
+function lbClamp(){const v=$("#lbv"),im=$("#lbi"),mx=Math.max(0,(im.clientWidth*LB.z-v.clientWidth)/2),my=Math.max(0,(im.clientHeight*LB.z-v.clientHeight)/2);LB.x=Math.min(mx,Math.max(-mx,LB.x));LB.y=Math.min(my,Math.max(-my,LB.y))}
+function lbZoom(z2,px=0,py=0){z2=Math.min(8,Math.max(1,z2));LB.x=px-(px-LB.x)*z2/LB.z;LB.y=py-(py-LB.y)*z2/LB.z;LB.z=z2;if(z2===1)LB.x=LB.y=0;lbClamp();lbApply()}
+function lbAt(z2,cx,cy){const r=$("#lbv").getBoundingClientRect();lbZoom(z2,cx-(r.left+r.width/2),cy-(r.top+r.height/2))}
+function lbShow(i){const n=LB.list.length;LB.i=(i+n)%n;const m=LB.list[LB.i],im=$("#lbi");im.src=m.src;im.alt=m.alt||"";
+ LB.z=1;LB.x=LB.y=0;lbApply();$("#lbc").textContent=(n>1?`${LB.i+1} / ${n}`:"")+(m.cap?`${n>1?" · ":""}${m.cap}`:"");
+ $("#lbpv").hidden=$("#lbnx").hidden=n<2}
+function openLightbox(list,i){LB.list=list;lbShow(i);const d=$("#lb");if(!d.open)d.showModal()}
+(()=>{
+ const d=$("#lb"),v=$("#lbv"),ptr=new Map();let pd=0;
+ const dist=()=>{const [a,b]=[...ptr.values()];return Math.hypot(a[0]-b[0],a[1]-b[1])},mid=()=>{const [a,b]=[...ptr.values()];return [(a[0]+b[0])/2,(a[1]+b[1])/2]};
+ $("#lbx").onclick=()=>d.close();$("#lbp").onclick=()=>lbZoom(LB.z*1.4);$("#lbo").onclick=()=>lbZoom(LB.z/1.4);$("#lbr").onclick=()=>lbZoom(1);
+ $("#lbpv").onclick=()=>lbShow(LB.i-1);$("#lbnx").onclick=()=>lbShow(LB.i+1);
+ v.addEventListener("wheel",e=>{e.preventDefault();lbAt(LB.z*Math.exp(-e.deltaY*.0018),e.clientX,e.clientY)},{passive:false});
+ v.ondblclick=e=>lbAt(LB.z>1?1:2.5,e.clientX,e.clientY);
+ v.onpointerdown=e=>{try{v.setPointerCapture(e.pointerId)}catch(x){}ptr.set(e.pointerId,[e.clientX,e.clientY]);if(ptr.size===2)pd=dist()};
+ v.onpointermove=e=>{if(!ptr.has(e.pointerId))return;const o=ptr.get(e.pointerId);ptr.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptr.size===2){const n=dist();if(pd){const m=mid();lbAt(LB.z*n/pd,m[0],m[1])}pd=n}
+  else if(LB.z>1){LB.x+=e.clientX-o[0];LB.y+=e.clientY-o[1];lbClamp();lbApply()}};
+ v.onpointerup=v.onpointercancel=e=>{ptr.delete(e.pointerId);pd=0};
+ d.addEventListener("keydown",e=>{const k=e.key;
+  if(k==="+"||k==="=")lbZoom(LB.z*1.4);else if(k==="-"||k==="_")lbZoom(LB.z/1.4);else if(k==="0")lbZoom(1);
+  else if(k==="ArrowRight"&&LB.list.length>1){e.preventDefault();lbShow(LB.i+1)}else if(k==="ArrowLeft"&&LB.list.length>1){e.preventDefault();lbShow(LB.i-1)}});
+ d.addEventListener("click",e=>{if(e.target===d)d.close()});
+})();
+
 /* ============ PÁGINAS (bloques intercambiables) ============ */
 const PAGES={
-inicio:()=>({t:"Bienvenida a tu proyecto",l:"Este sitio te explica, paso a paso, de qué se compone una página web y qué necesitamos de ti. No necesitas conocimientos técnicos 🤓.",h:`
+inicio:()=>({t:"Bienvenido/a a tu proyecto",l:"Este sitio te explica, paso a paso, de qué se compone una página web y qué necesitamos de ti. No necesitas conocimientos técnicos.",h:`
 <div class="grid"><div class="box"><h2>Objetivo del proyecto</h2><p>${CONFIG.goal}</p></div><div class="box"><h2>¿A quién va dirigida?</h2><p>${CONFIG.audience}</p></div></div>
-<div class="box"><h2>Cómo usar esta guía</h2><p><b>1.</b> Recorre las páginas del menú para conocer cada parte de un sitio web.<br><b>2.</b> Abre el panel <b>Tu información</b>, abajo a la derecha, y ve completando tus datos cuando quieras: se guarda en este navegador.<br><b>3.</b> Revisa el prototipo en la página Prototipo y anota tus comentarios.<br><b>4.</b> Abre el panel <b>Estilo visual</b>, abajo a la izquierda, en este apartado puedes adaptar el desarrollo del estilo, diseño, tipografía y color de la pagina a tus gustos: se guarda en este navegador.<br><b>5.</b> Pulsa <b>Enviar</b> en el formulario (<b>Tu información</b>) y recibire todo.</p>
+<div class="box"><h2>Cómo usar esta guía</h2><p><b>1.</b> Recorre las páginas del menú para conocer cada parte de un sitio web.<br><b>2.</b> Abre el panel <b>Tu información</b>, abajo a la derecha, y ve completando tus datos cuando quieras: se guarda en este navegador.<br><b>3.</b> Revisa el prototipo en la página Prototipo y anota tus comentarios.<br><b>4.</b> Pulsa <b>Enviar</b> y recibiremos todo.</p>
 <button class="btn" onclick="location.hash='estructura'">Empezar por la estructura</button></div>${Placeholder("portada","logo o imagen de portada del proyecto")}`}),
 
 estructura:()=>({t:"Dónde va cada cosa",l:"Una página web se arma como un edificio: entrada, directorio, espacios principales y zona de servicios. Toca cada zona del boceto.",h:`
@@ -478,7 +508,7 @@ function addPayload(fd){
 const Pager=id=>{const l=on(),i=l.findIndex(x=>x.id===id),a=l[i-1],b=l[i+1];return `<nav class="pg" aria-label="Navegar entre páginas">${a?`<a class="btn alt" href="#${a.id}">← ${a.label}</a>`:"<span></span>"}<small class="kh">Usa las flechas ← → del teclado</small>${b?`<a class="btn" href="#${b.id}">${b.label} →</a>`:"<span></span>"}</nav>`};
 function go(d){const l=on(),i=l.findIndex(x=>x.id===(location.hash.slice(1)||l[0].id)),n=l[i+d];if(n)location.hash=n.id}
 addEventListener("keydown",e=>{
- if((e.key!=="ArrowRight"&&e.key!=="ArrowLeft")||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||e.defaultPrevented||$("#dlg").open)return;
+ if((e.key!=="ArrowRight"&&e.key!=="ArrowLeft")||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||e.defaultPrevented||$("#dlg").open||$("#lb").open)return;
  if(e.target.closest&&e.target.closest("input,textarea,select,[contenteditable],#fp,#sp,.tw,.car"))return;
  e.preventDefault();go(e.key==="ArrowRight"?1:-1);
 });

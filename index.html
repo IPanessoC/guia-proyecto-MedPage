@@ -22,6 +22,12 @@
   <p style="margin-top:12px"><button class="btn" type="button" id="srnd">Mezclar al azar</button> <button class="btn alt" type="button" id="srst">Restablecer</button></p></div>
 </aside>
 <dialog id="dlg"><h3 id="dt"></h3><div id="db"></div><p style="margin-top:16px"><button class="btn" id="dc">Entendido</button></p></dialog>
+<dialog id="lb" aria-label="Visor de imagen ampliada">
+  <div class="lbv" id="lbv"><img id="lbi" alt="" draggable="false"></div>
+  <div class="lbt"><span id="lbc"></span><button class="lbb" id="lbo" type="button" aria-label="Alejar">−</button><span id="lbz" aria-live="polite">100%</span><button class="lbb" id="lbp" type="button" aria-label="Acercar">+</button><button class="lbb" id="lbr" type="button" aria-label="Restablecer zoom">⤢</button><button class="lbb" id="lbx" type="button" aria-label="Cerrar">✕</button></div>
+  <button class="lbb lbn pv" id="lbpv" type="button" aria-label="Imagen anterior">‹</button><button class="lbb lbn nx" id="lbnx" type="button" aria-label="Imagen siguiente">›</button>
+  <p class="lbh">Rueda del ratón o pellizco para hacer zoom · arrastra para mover · doble clic para ampliar · Esc para cerrar</p>
+</dialog>
 
 <script src="assets/manifest.js"></script>
 <script src="js/app.js"></script>

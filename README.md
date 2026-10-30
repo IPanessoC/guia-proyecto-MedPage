@@ -44,3 +44,6 @@ Las 3 imágenes de `assets/prototipo/` son de ejemplo: bórralas y vuelve a ejec
 ## Modo claro / oscuro
 Botón ☾/☀ en la barra de navegación y selector Automático / Claro / Oscuro en el panel de estilos. Cada paleta tiene su **complementaria** (clara si la principal es oscura, y viceversa), generada automáticamente conservando el tono (`comp()` en `js/app.js`); en las listas de colores se muestra a la derecha de las muestras. Sin paleta elegida, el modo cambia los colores base del sitio. Automático sigue la preferencia del sistema.
 Para añadir un estilo de diseño: agrega una fila a `STYLES` (`[nombre, fuente, 3 colores principales, 3 secundarios, forma, efectos, descripción, grupo]`). Usa variables (`var(--acc)`, `color-mix(...)`) en los efectos para que funcionen en ambos modos.
+
+## Datos guardados en el navegador
+El borrador del formulario (`guia-borrador`) y el estilo visual (`guia-estilo3`) se guardan en `localStorage`. Tras un envío exitoso a Formspree, `clearSaved()` borra ambos, vacía el formulario y deja el sitio con el estilo que se estaba viendo (solo en esa sesión). Si el envío falla o se usa “Copiar resumen”, no se borra nada.

@@ -2,8 +2,8 @@
    Cambia estos datos, activa/oculta páginas con on:true/false
    y activa/oculta zonas de la anatomía con on:true/false. */
 const CONFIG={
-  project:"[Nombre del proyecto]", client:"[Nombre del cliente]", analyst:"[Analista Funcional]",
-  contact:"[correo@empresa.com] · [Teléfono]",
+  project:"Med-Page", client:"Maria Camila P.", analyst:"Inti Panesso C. / Analista Funcional",
+  contact:"intipanessochavez@gmail.com · +57 333 2356966",
   goal:"[Ej.: Presentar los servicios y facilitar que los clientes nos contacten.]",
   audience:"[Ej.: Familias de la ciudad que buscan servicios de ___.]",
   formspree:"https://formspree.io/f/TU_ID",
@@ -71,9 +71,9 @@ function openForm(){$("#fp").classList.remove("min");$("#tg").setAttribute("aria
 
 /* ============ PÁGINAS (bloques intercambiables) ============ */
 const PAGES={
-inicio:()=>({t:"Bienvenido/a a tu proyecto",l:"Este sitio te explica, paso a paso, de qué se compone una página web y qué necesitamos de ti. No necesitas conocimientos técnicos.",h:`
+inicio:()=>({t:"Bienvenida a tu proyecto",l:"Este sitio te explica, paso a paso, de qué se compone una página web y qué necesitamos de ti. No necesitas conocimientos técnicos 🤓.",h:`
 <div class="grid"><div class="box"><h2>Objetivo del proyecto</h2><p>${CONFIG.goal}</p></div><div class="box"><h2>¿A quién va dirigida?</h2><p>${CONFIG.audience}</p></div></div>
-<div class="box"><h2>Cómo usar esta guía</h2><p><b>1.</b> Recorre las páginas del menú para conocer cada parte de un sitio web.<br><b>2.</b> Abre el panel <b>Tu información</b>, abajo a la derecha, y ve completando tus datos cuando quieras: se guarda en este navegador.<br><b>3.</b> Revisa el prototipo en la página Prototipo y anota tus comentarios.<br><b>4.</b> Pulsa <b>Enviar</b> y recibiremos todo.</p>
+<div class="box"><h2>Cómo usar esta guía</h2><p><b>1.</b> Recorre las páginas del menú para conocer cada parte de un sitio web.<br><b>2.</b> Abre el panel <b>Tu información</b>, abajo a la derecha, y ve completando tus datos cuando quieras: se guarda en este navegador.<br><b>3.</b> Revisa el prototipo en la página Prototipo y anota tus comentarios.<br><b>4.</b> Abre el panel <b>Estilo visual</b>, abajo a la izquierda, en este apartado puedes adaptar el desarrollo del estilo, diseño, tipografía y color de la pagina a tus gustos: se guarda en este navegador.<br><b>5.</b> Pulsa <b>Enviar</b> en el formulario (<b>Tu información</b>) y recibire todo.</p>
 <button class="btn" onclick="location.hash='estructura'">Empezar por la estructura</button></div>${Placeholder("portada","logo o imagen de portada del proyecto")}`}),
 
 estructura:()=>({t:"Dónde va cada cosa",l:"Una página web se arma como un edificio: entrada, directorio, espacios principales y zona de servicios. Toca cada zona del boceto.",h:`

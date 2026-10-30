@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guía de tu proyecto web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@400;600&family=Playfair+Display:wght@400;700&family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<nav class="nav" id="nav" aria-label="Páginas del sitio"></nav>
+<main class="wrap" id="app"></main>
+<footer class="ftr" id="ftr"></footer>
+
+<aside id="fp" class="min" aria-label="Formulario de contenido">
+  <button class="tg" id="tg" aria-expanded="false"><span>Tu información</span><span id="cnt">0 campos</span></button>
+  <form class="fb" id="frm" novalidate></form>
+</aside>
+<aside id="sp" class="min" aria-label="Selector de estilos visuales">
+  <button class="tg" id="stg" aria-expanded="false"><span>Estilo visual</span><span id="sn">Predeterminado</span></button>
+  <div class="fb"><div class="tabs" id="smode" role="group" aria-label="Modo claro u oscuro"></div><div class="tabs" id="stabs" role="tablist"></div><div id="sl"></div>
+  <p style="margin-top:12px"><button class="btn" type="button" id="srnd">Mezclar al azar</button> <button class="btn alt" type="button" id="srst">Restablecer</button></p></div>
+</aside>
+<dialog id="dlg"><h3 id="dt"></h3><div id="db"></div><p style="margin-top:16px"><button class="btn" id="dc">Entendido</button></p></dialog>
+
+<script src="assets/manifest.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

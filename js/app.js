@@ -2,8 +2,8 @@
    Cambia estos datos, activa/oculta páginas con on:true/false
    y activa/oculta zonas de la anatomía con on:true/false. */
 const CONFIG={
-  project:"[Nombre del proyecto]", client:"[Nombre del cliente]", analyst:"[Analista Funcional]",
-  contact:"[correo@empresa.com] · [Teléfono]",
+  project:"Protafolio Profesional (Med-Page)", client:"Dra M.Camila Paredes P.", analyst:"Inti Panesso C. / Analista Funcional",
+  contact:"intipanessochavez@gmail.com · +57 333 23566966",
   goal:"[Ej.: Presentar los servicios y facilitar que los clientes nos contacten.]",
   audience:"[Ej.: Familias de la ciudad que buscan servicios de ___.]",
   formspree:"https://formspree.io/f/TU_ID",
@@ -19,7 +19,16 @@ const CONFIG={
   styler:true, /* mostrar el selector de estilos visuales */
   zones:{nav:true,header:true,body:true,footer:true,modal:true,anim:true},
   brandingState:[["Logotipo","[Sí / No / En proceso]"],["Paleta de colores","[Sí / No / En proceso]"],["Tipografías","[Sí / No / En proceso]"],["Fotografías propias","[Sí / No / En proceso]"],["Manual de marca","[Sí / No / En proceso]"]],
-  stages:[["Descubrimiento","Conversamos sobre tu negocio, objetivos y público.","Responder preguntas","[X días]"],["Estructura (el plano)","Definimos páginas y contenido de cada una.","Aprobar el mapa del sitio","[X días]"],["Diseño","Colores, tipografías, imágenes y estilo.","Opinar y aprobar","[X días]"],["Desarrollo","Convertimos el diseño en página funcional.","Entregar textos e imágenes finales","[X días]"],["Pruebas","Revisamos celular, tablet y computador.","Probar y reportar","[X días]"],["Publicación","Tu sitio sale a internet.","Aprobación final","[X días]"],["Acompañamiento","Resolvemos dudas y ajustes.","Avisarnos novedades","[X días]"]]
+  stages:[
+  ["Descubrimiento","Conversamos sobre tu negocio, objetivos y público.","Responder preguntas","[X días]",2,"Conversaciones y definición de objetivos: pide claridad de ideas más que trabajo técnico."],
+  ["Estructura (el plano)","Definimos páginas y contenido de cada una.","Aprobar el mapa del sitio","[X días]",3,"Hay que decidir qué páginas existen y priorizar qué se cuenta en cada una."],
+  ["Diseño","Colores, tipografías, imágenes y estilo.","Opinar y aprobar","[X días]",4,"Traducir tu identidad en colores, tipografías y formas; suele requerir varias rondas de ajustes."],
+  ["Desarrollo","Convertimos el diseño en página funcional.","Entregar textos e imágenes finales","[X días]",5,"La etapa más técnica y larga: construir cada página, conectar el formulario y adaptar todo a celular, tablet y computador."],
+  ["Pruebas","Revisamos celular, tablet y computador.","Probar y reportar","[X días]",3,"Revisar en distintos dispositivos y corregir detalles; depende de reportar observaciones a tiempo."],
+  ["Publicación","Tu sitio sale a internet.","Aprobación final","[X días]",2,"Configuración técnica del dominio y el alojamiento; se hace una sola vez."],
+  ["Acompañamiento","Resolvemos dudas y ajustes.","Avisarnos novedades","[X días]",1,"Resolver dudas y hacer ajustes menores; esfuerzo ligero y puntual."]
+  /* Cada etapa: [nombre, qué sucede, qué necesitamos, duración, nivel de dificultad 1-5 (1 Bajo … 5 Alto), descripción] */
+]
 };
 const ZONES=[
  {k:"nav",cls:"nv",name:"Barra de navegación (nav)",what:"El directorio del sitio: enlaces para moverse entre secciones.",does:"Si el visitante no encuentra lo que busca en segundos, se va. En el celular suele plegarse en un ícono ☰.",ask:"Qué opciones tendrá, en qué orden y si lleva un botón destacado."},
@@ -42,7 +51,7 @@ const GLOS=[["Nav / Menú","Barra de enlaces para moverse por el sitio."],["Head
 /* ============ COMPONENTES REUTILIZABLES ============ */
 const $=s=>document.querySelector(s);
 const on=()=>CONFIG.pages.filter(p=>p.on);
-const Nav=cur=>`<b>${CONFIG.project}</b>`+on().map(p=>`<a href="#${p.id}" ${p.id===cur?'aria-current="page"':''}>${p.label}</a>`).join("")+`<button class="btn alt mt" id="mt" type="button" aria-label="Cambiar entre modo claro y oscuro">☾</button>`;
+const Nav=cur=>`<b class="brand">${CONFIG.project}</b><div class="links" id="nl">`+on().map(p=>`<a href="#${p.id}" ${p.id===cur?'aria-current="page"':''}>${p.label}</a>`).join("")+`</div><button class="btn alt mt" id="mt" type="button" aria-label="Cambiar entre modo claro y oscuro">☾</button><button class="btn alt hb" id="hb" type="button" aria-expanded="false" aria-controls="nl" aria-label="Abrir menú">☰</button>`;
 const Header=(p,title,lead)=>{const l=on(),i=l.findIndex(x=>x.id===p.id)+1;return `<header class="hdr"><small>Página ${i} de ${l.length}</small><h1>${title}</h1><p>${lead}</p></header>`};
 const Footer=()=>`<p><b>${CONFIG.client}</b> · Preparado por ${CONFIG.analyst}</p><p>${CONFIG.contact}</p>`;
 const Placeholder=(slot,t)=>Carousel(slot,t);
@@ -99,12 +108,33 @@ function openLightbox(list,i){LB.list=list;lbShow(i);const d=$("#lb");if(!d.open
  d.addEventListener("click",e=>{if(e.target===d)d.close()});
 })();
 
+/* ============ AYUDA Y ACCESOS AL MEZCLADOR DE ESTILO ============ */
+function openStyler(tab){const sp=$("#sp");if(!sp)return;if(tab&&CONFIG.styler){TAB=tab;drawStyles()}sp.classList.remove("min");$("#stg").setAttribute("aria-expanded","true");$("#fp").classList.add("min");$("#tg").setAttribute("aria-expanded","false");$("#stg").focus()}
+const StylerHelp=()=>!CONFIG.styler?"":`<div class="box cta"><h2>Prueba el aspecto de tu sitio con el mezclador de estilo visual</h2>
+<p>Mientras recorres esta guía puedes cambiar cómo se ve <b>toda la página</b>, para descubrir qué estilo te representa. Solo cambia el aspecto: el contenido y las imágenes se mantienen.</p>
+<div class="grid"><div><h3>Tipografía</h3><p>${FD.length} fuentes de Google Fonts, de sobrias a juguetonas.</p></div><div><h3>Colores</h3><p>${COLORS.length} paletas. Cada una trae su versión complementaria, clara u oscura.</p></div><div><h3>Formas y efectos</h3><p>${STYLES.length} estilos: esquinas, bordes, sombras, vidrio, relieve, pixel art y más.</p></div><div><h3>Todo</h3><p>Aplica un estilo completo de una sola vez: fuente, colores y forma.</p></div></div>
+<h3>Cómo usarlo</h3><p><b>1.</b> Abre el panel <b>Estilo visual</b> (abajo a la izquierda) o usa el botón de abajo.<br><b>2.</b> Elige una pestaña y toca una opción: el sitio cambia al instante. Puedes combinar libremente una fuente, una paleta y una forma.<br><b>3.</b> Cambia entre modo claro y oscuro con el botón ☾/☀ de la barra superior o con el selector del panel (Automático sigue tu dispositivo).<br><b>4.</b> ¿Sin ideas? Pulsa <b>Mezclar al azar</b>. <b>Restablecer</b> vuelve al aspecto inicial.<br><b>5.</b> Tu elección se guarda en este navegador y, al enviar el formulario, le llega al equipo junto con el detalle técnico para reproducirla.</p>
+<button class="btn" onclick="openStyler('t')">🎨 Abrir el mezclador de estilo</button></div>`;
+const StylerCTA=()=>!CONFIG.styler?"":`<div class="box cta"><h3>¿Quieres ver cómo se vería tu marca?</h3><p>Prueba tipografías, colores y formas en tiempo real; el sitio completo se adapta a tu elección.</p>
+<button class="btn" onclick="openStyler('t')">🎨 Abrir el mezclador de estilo visual</button> <button class="btn alt" onclick="openStyler('f')">Tipografías</button> <button class="btn alt" onclick="openStyler('c')">Colores</button> <button class="btn alt" onclick="openStyler('s')">Formas</button></div>`;
+
+/* ============ MEDIDOR DE DIFICULTAD / ESFUERZO ============ */
+const LEVELS=[["Bajo","#2e9e5b"],["Bajo-Medio","#8bb934"],["Medio","#e0a800"],["Medio-Alto","#f07f1f"],["Alto","#d6453d"]];
+const Meter=n=>{const L=LEVELS[n-1];if(!L)return "—";return `<div class="mtr" role="img" aria-label="Dificultad ${L[0]}: nivel ${n} de 5"><span class="mb">${LEVELS.map((l,i)=>i<n?`<i class="on" style="background:${l[1]};animation-delay:${i*70}ms"></i>`:"<i></i>").join("")}</span><b class="ml"><span class="dot" style="background:${L[1]}"></span>${L[0]}</b></div>`};
+const Legend=()=>`<p class="lg"><b>Escala de dificultad:</b>${LEVELS.map(l=>`<span><i class="dot" style="background:${l[1]}"></i>${l[0]}</span>`).join("")}</p>`;
+
+/* ============ MENÚ HAMBURGUESA (móvil) ============ */
+function setMenu(o){const n=$("#nav"),b=$("#hb");n.classList.toggle("open",o);if(b){b.setAttribute("aria-expanded",String(o));b.setAttribute("aria-label",o?"Cerrar menú":"Abrir menú");b.textContent=o?"✕":"☰"}}
+document.addEventListener("click",e=>{if(!e.target.closest("#nav"))setMenu(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#nav").classList.contains("open")){setMenu(false);const b=$("#hb");if(b)b.focus()}});
+addEventListener("resize",()=>{if(innerWidth>768)setMenu(false)});
+
 /* ============ PÁGINAS (bloques intercambiables) ============ */
 const PAGES={
-inicio:()=>({t:"Bienvenido/a a tu proyecto",l:"Este sitio te explica, paso a paso, de qué se compone una página web y qué necesitamos de ti. No necesitas conocimientos técnicos.",h:`
+inicio:()=>({t:"Bienvenida a tu proyecto",l:"Este sitio te explica, paso a paso, de qué se compone una página web y qué necesitamos de ti. No necesitas conocimientos técnicos.",h:`
 <div class="grid"><div class="box"><h2>Objetivo del proyecto</h2><p>${CONFIG.goal}</p></div><div class="box"><h2>¿A quién va dirigida?</h2><p>${CONFIG.audience}</p></div></div>
 <div class="box"><h2>Cómo usar esta guía</h2><p><b>1.</b> Recorre las páginas del menú para conocer cada parte de un sitio web.<br><b>2.</b> Abre el panel <b>Tu información</b>, abajo a la derecha, y ve completando tus datos cuando quieras: se guarda en este navegador.<br><b>3.</b> Revisa el prototipo en la página Prototipo y anota tus comentarios.<br><b>4.</b> Pulsa <b>Enviar</b> y recibiremos todo.</p>
-<button class="btn" onclick="location.hash='estructura'">Empezar por la estructura</button></div>${Placeholder("portada","logo o imagen de portada del proyecto")}`}),
+<button class="btn" onclick="location.hash='estructura'">Empezar por la estructura</button></div>${StylerHelp()}${Placeholder("portada","logo o imagen de portada del proyecto")}`}),
 
 estructura:()=>({t:"Dónde va cada cosa",l:"Una página web se arma como un edificio: entrada, directorio, espacios principales y zona de servicios. Toca cada zona del boceto.",h:`
 <div class="grid"><div><div class="wf" id="wf">${ZONES.filter(z=>CONFIG.zones[z.k]).map(z=>`<button class="z ${z.cls}" data-k="${z.k}" aria-pressed="false">${z.k==="anim"?"Animación":z.name.split(" (")[0]}</button>`).join("")}</div></div>
@@ -123,13 +153,14 @@ contenido:()=>({t:"Títulos, textos y botones",l:"Dentro de cada sección, el co
 <p><b>Ventana modal:</b> así aparece una ventana por encima de la página.</p><button class="btn alt" id="dm">Abrir ejemplo de modal</button></div>
 ${Placeholder("contenido","sección del proyecto con título, párrafo y botón señalados")}`,after(){$("#dm").onclick=()=>openModal("¡Tu mensaje fue enviado!","<p>Esto es una ventana modal: muestra información extra sin salir de la página.</p>")}}),
 
-proceso:()=>({t:"Cómo trabajaremos",l:"Como construir una casa: se conversa, se dibuja el plano, se construye y se entrega.",h:`<div class="box tw"><table><thead><tr><th>Etapa</th><th>¿Qué sucede?</th><th>Qué necesitamos de ti</th><th>Duración</th></tr></thead><tbody>${CONFIG.stages.map((s,i)=>`<tr><td><b>${i+1}. ${s[0]}</b></td><td>${s[1]}</td><td>${s[2]}</td><td>${s[3]}</td></tr>`).join("")}</tbody></table></div>
+proceso:()=>({t:"Cómo trabajaremos",l:"Como construir una casa: se conversa, se dibuja el plano, se construye y se entrega.",h:`<div class="box tw"><table><thead><tr><th>Etapa</th><th>¿Qué sucede?</th><th>Qué necesitamos de ti</th><th>Duración</th><th>Dificultad / esfuerzo</th></tr></thead><tbody>${CONFIG.stages.map((s,i)=>`<tr><td data-label="Etapa"><b>${i+1}. ${s[0]}</b></td><td data-label="¿Qué sucede?">${s[1]}</td><td data-label="Qué necesitamos de ti">${s[2]}</td><td data-label="Duración">${s[3]}</td><td class="df" data-label="Dificultad / esfuerzo">${s[4]?Meter(s[4]):"—"}${s[5]?`<small class="dd">${s[5]}</small>`:""}</td></tr>`).join("")}</tbody></table></div>
+${Legend()}
 <div class="box"><h3>Revisiones</h3><p>En cada etapa te mostraremos un avance y pediremos tu aprobación. Sé específico/a: “Quiero el título de Servicios más grande” ayuda más que “No me convence”. Si cambia el alcance, ajustaremos tiempos y costos.</p></div>${Placeholder("proceso","línea de tiempo con fechas reales")}`}),
 
 branding:()=>({t:"Tu identidad visual",l:"Es la personalidad visual de tu negocio: cómo se ve y cómo se siente. Si aún no la tienes, la definimos contigo.",h:`
-<div class="grid"><div class="box"><h3>Qué incluye</h3><p>Logotipo, paleta de 2 a 4 colores, tipografías, estilo de imágenes y tono de comunicación.</p></div>
+${StylerCTA()}<div class="grid"><div class="box"><h3>Qué incluye</h3><p>Logotipo, paleta de 2 a 4 colores, tipografías, estilo de imágenes y tono de comunicación.</p></div>
 <div class="box"><h3>¿Sin branding?</h3><p>Conversamos cómo quieres que te perciban, revisamos 3 a 5 referencias, proponemos colores y tipografías, y ajustamos hasta que te sientas representado/a.</p></div></div>
-<div class="box tw"><table><thead><tr><th>Elemento</th><th>¿Existe?</th></tr></thead><tbody>${CONFIG.brandingState.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</tbody></table></div>${Placeholder("branding","moodboard, paleta de colores o propuesta de logo")}`}),
+<div class="box tw"><table><thead><tr><th>Elemento</th><th>¿Existe?</th></tr></thead><tbody>${CONFIG.brandingState.map(r=>`<tr><td data-label="Elemento">${r[0]}</td><td data-label="¿Existe?">${r[1]}</td></tr>`).join("")}</tbody></table></div>${Placeholder("branding","moodboard, paleta de colores o propuesta de logo")}`}),
 
 prototipo:()=>({t:"Prototipo del proyecto",l:"Recorre las capturas del prototipo y cuéntanos tus comentarios en el panel “Tu información”, sección Prototipo.",h:`${Carousel("prototipo","capturas del prototipo del proyecto")}
 <div class="box"><h3>¿Qué revisar?</h3><p>Fíjate en la estructura, los textos, los colores y si falta algo. Anota lo que quieras cambiar en el formulario.</p><button class="btn" onclick="openForm()">Abrir formulario</button></div>`}),
@@ -139,7 +170,7 @@ glosario:()=>({t:"Mini glosario",l:"Toca un término para ver su significado.",h
 
 /* ============ ROUTER ============ */
 function route(){const l=on();if(!l.length)return;const p=l.find(x=>x.id===location.hash.slice(1))||l[0];const d=PAGES[p.id]?PAGES[p.id]():{t:p.label,l:"",h:""};
- document.title=`${d.t} · ${CONFIG.project}`;$("#nav").innerHTML=Nav(p.id);$("#mt").onclick=toggleMode;syncMT();$("#app").innerHTML=Header(p,d.t,d.l)+d.h+Pager(p.id);$("#ftr").innerHTML=Footer();if(d.after)d.after();initCarousels($("#app"));window.scrollTo(0,0)}
+ document.title=`${d.t} · ${CONFIG.project}`;$("#nav").innerHTML=Nav(p.id);$("#mt").onclick=toggleMode;syncMT();$("#hb").onclick=()=>setMenu(!$("#nav").classList.contains("open"));$("#nl").onclick=e=>{if(e.target.closest("a"))setMenu(false)};setMenu(false);$("#app").innerHTML=Header(p,d.t,d.l)+d.h+Pager(p.id);$("#ftr").innerHTML=Footer();if(d.after)d.after();initCarousels($("#app"));window.scrollTo(0,0)}
 addEventListener("hashchange",route);
 
 /* ============ FORMULARIO FLOTANTE ============ */

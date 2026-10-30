@@ -50,3 +50,12 @@ El borrador del formulario (`guia-borrador`) y el estilo visual (`guia-estilo3`)
 
 ## Visor ampliado con zoom
 Al hacer clic (o Enter) en cualquier imagen de un carrusel se abre una ventana modal (`#lb`) con la imagen grande. Zoom de 100 % a 800 %: botones − / +, rueda del ratón, pellizco en pantallas táctiles, doble clic o doble toque (100 % ↔ 250 %) y teclas `+`, `-`, `0`. Con zoom, se mueve arrastrando. Si el carrusel tiene varias imágenes, se navega con ‹ › o las flechas del teclado; Esc o ✕ cierran. Lógica en `js/app.js` (`openLightbox`, `lbZoom`).
+
+## Ayuda y accesos al mezclador
+La página Inicio explica el mezclador (`StylerHelp()`) y la página Identidad tiene un botón de acceso rápido (`StylerCTA()`) que abre el panel en la pestaña elegida (`openStyler('t'|'f'|'c'|'s')`). Ambos desaparecen si `CONFIG.styler=false`.
+
+## Tabla del proceso: dificultad / esfuerzo
+Cada etapa de `CONFIG.stages` lleva al final un nivel del 1 al 5 (1 Bajo, 2 Bajo-Medio, 3 Medio, 4 Medio-Alto, 5 Alto) y una breve descripción. La tabla de la página Proceso los muestra con un medidor de 5 segmentos (verde → rojo, `Meter()`) y una leyenda de la escala. Para cambiar los niveles o colores edita `LEVELS` y los dos últimos datos de cada etapa; si una etapa no tiene nivel, muestra “—”.
+
+## Diseño responsivo y menú hamburguesa
+Puntos de corte en `css/styles.css`: 768 px (menú hamburguesa ☰ con desplegable; el botón de modo claro/oscuro queda visible en la barra), 700 px (las tablas pasan a tarjetas apiladas usando `data-label` en cada celda: añade `data-label` a las tablas nuevas), 600 px (paneles flotantes compactos y a ancho completo al abrirse, títulos acotados, visor de imágenes a pantalla completa). El menú se cierra al elegir una página, con Esc, al tocar fuera o al ampliar la ventana (`setMenu()` en `js/app.js`).

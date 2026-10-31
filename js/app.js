@@ -6,7 +6,7 @@ const CONFIG={
   contact:"intipanessochavez@gmail.com · +57 333 23566966",
   goal:"[Ej.: Presentar los servicios y facilitar que los clientes nos contacten.]",
   audience:"[Ej.: Familias de la ciudad que buscan servicios de ___.]",
-  formspree:"https://formspree.io/f/TU_ID",
+  formspree:"https://formspree.io/f/xvkgzkao",
   pages:[
     {id:"inicio",label:"Inicio",on:true},
     {id:"estructura",label:"Estructura",on:true},
